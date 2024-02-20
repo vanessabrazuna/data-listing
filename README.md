@@ -10,11 +10,14 @@ Data Listing App.
 The project was developed using the following technologies
 
 - [ReactJS](https://react.dev/)
+- [React Router DOM](https://reactrouter.com/en/main)
 - [TypeScript](https://www.typescriptlang.org)
+- [Tailwindcss](https://tailwindcss.com)
+- [Tailwind Variants](https://www.tailwind-variants.org)
+- [Tailwind Merge](https://www.npmjs.com/package/tailwind-merge)
+- [Radix UI](https://www.radix-ui.com/)
+- [Lucide React](https://lucide.dev/)
 - [Eslint](https://eslint.org/)
-<!-- - [Lucide React](https://lucide.dev/) -->
-<!-- - [Radix UI](https://www.radix-ui.com/) -->
-<!-- - [Sonner](https://sonner.emilkowal.ski/) -->
 
 
 ## Running

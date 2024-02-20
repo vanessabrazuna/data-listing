@@ -17,6 +17,9 @@ The project was developed using the following technologies
 - [Tailwind Merge](https://www.npmjs.com/package/tailwind-merge)
 - [Radix UI](https://www.radix-ui.com/)
 - [Lucide React](https://lucide.dev/)
+- [Json Server](https://github.com/typicode/json-server)
+- [React Query](https://tanstack.com/query/latest)
+<!-- - [Axios](https://axios-http.com/) -->
 - [Eslint](https://eslint.org/)
 
 

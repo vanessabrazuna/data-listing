@@ -10,7 +10,7 @@ Data Listing App.
 The project was developed using the following technologies
 
 - [ReactJS](https://react.dev/)
-- [React Router DOM](https://reactrouter.com/en/main)
+- [React Router DOM](https://reactrouter.com/en/main) <!-- useSearchParams -->
 - [TypeScript](https://www.typescriptlang.org)
 - [Tailwindcss](https://tailwindcss.com)
 - [Tailwind Variants](https://www.tailwind-variants.org)

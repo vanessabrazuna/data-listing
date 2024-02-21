@@ -1,4 +1,8 @@
-import { Plus, Search, FileDown, MoreHorizontal } from 'lucide-react'
+import { useState } from 'react'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+import { Plus, Search, FileDown, MoreHorizontal, Filter } from 'lucide-react'
+
 import { Header } from './components/header'
 import { Tabs } from './components/tabs'
 import { Pagination } from './components/pagination'
@@ -13,22 +17,59 @@ import {
   TableRow,
 } from './components/ui/table'
 
-import { useQuery } from '@tanstack/react-query'
+export interface TagResponse {
+  // eslint-disable-next-line no-use-before-define
+  data: Tag[]
+  first: number
+  prev: number | null
+  next: number
+  last: number
+  pages: number
+  items: number
+}
+
+export interface Tag {
+  id: string
+  title: string
+  amountOfVideos: number
+  slug: string
+}
 
 export function App() {
-  const data = useQuery({
-    queryKey: ['get-tags'],
+  const [searchParams, setSearchParams] = useSearchParams()
+  const urlFilter = searchParams.get('filter') ?? ''
+
+  const [filter, setFilter] = useState(urlFilter)
+
+  const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
+
+  const { data: tagsResponse, isLoading } = useQuery<TagResponse>({
+    queryKey: ['get-tags', urlFilter, page],
     queryFn: async () => {
       const response = await fetch(
-        'http://localhost:3333/tags?_page=1&_per_page=10',
+        `http://localhost:3333/tags?_page=${page}&_per_page=10&title=${urlFilter}`,
       )
       const data = await response.json()
 
-      console.log(data)
+      await new Promise((resolve) => setTimeout(resolve, 2000))
 
       return data
     },
+    placeholderData: keepPreviousData,
   })
+
+  function handleFilter() {
+    setSearchParams((params) => {
+      params.set('page', '1')
+      params.set('filter', filter)
+
+      return params
+    })
+  }
+
+  if (isLoading) {
+    return null
+  }
 
   return (
     <div className="py-10 space-y-8">
@@ -47,10 +88,21 @@ export function App() {
         </div>
 
         <div className="flex items-center justify-between">
-          <Input variant="filter">
-            <Search className="size-3" />
-            <Control placeholder="Search tags..." />
-          </Input>
+          <div className="flex items-center">
+            <Input variant="filter">
+              <Search className="size-3" />
+              <Control
+                placeholder="Search tags..."
+                onChange={(e) => setFilter(e.target.value)}
+                value={filter}
+              />
+            </Input>
+          </div>
+
+          <Button onClick={handleFilter}>
+            <Filter className="size-3" />
+            Filter
+          </Button>
 
           <Button>
             <FileDown className="size-3" />
@@ -68,19 +120,19 @@ export function App() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.from({ length: 10 }).map((_, index) => {
+            {tagsResponse?.data.map((tag) => {
               return (
-                <TableRow key={index}>
+                <TableRow key={tag.id}>
                   <TableCell></TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
-                      <span className="font-medium">React</span>
-                      <span className="text-xs text-zinc-500">
-                        72120cec-6a2b-44f0-a10c-6ee9b2f254d9
-                      </span>
+                      <span className="font-medium">{tag.title}</span>
+                      <span className="text-xs text-zinc-500">{tag.slug}</span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-zinc-300">13 video(s)</TableCell>
+                  <TableCell className="text-zinc-300">
+                    {tag.amountOfVideos} video(s)
+                  </TableCell>
                   <TableCell className="text-right">
                     <Button size="icon">
                       <MoreHorizontal className="size-4" />
@@ -92,7 +144,13 @@ export function App() {
           </TableBody>
         </Table>
 
-        <Pagination />
+        {tagsResponse && (
+          <Pagination
+            pages={tagsResponse.pages}
+            items={tagsResponse.items}
+            page={page}
+          />
+        )}
       </main>
     </div>
   )

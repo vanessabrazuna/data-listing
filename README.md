@@ -19,8 +19,8 @@ The project was developed using the following technologies
 - [Lucide React](https://lucide.dev/)
 - [Json Server](https://github.com/typicode/json-server)
 - [React Query](https://tanstack.com/query/latest)
-<!-- - [Axios](https://axios-http.com/) -->
 - [Eslint](https://eslint.org/)
+<!-- - [Axios](https://axios-http.com/) -->
 
 
 ## Running

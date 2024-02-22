@@ -1,12 +1,13 @@
-import { useState } from 'react'
-import { keepPreviousData, useQuery } from '@tanstack/react-query'
-import { useSearchParams } from 'react-router-dom'
-import { Search, FileDown, MoreHorizontal, Filter, Plus } from 'lucide-react'
-import * as Dialog from '@radix-ui/react-dialog'
-
+import {
+  Plus,
+  Search,
+  Filter,
+  FileDown,
+  MoreHorizontal,
+  Loader2,
+} from 'lucide-react'
 import { Header } from './components/header'
 import { Tabs } from './components/tabs'
-import { Pagination } from './components/pagination'
 import { Button } from './components/ui/button'
 import { Control, Input } from './components/ui/input'
 import {
@@ -17,23 +18,28 @@ import {
   TableHeader,
   TableRow,
 } from './components/ui/table'
+import { Pagination } from './components/pagination'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
+import { useSearchParams } from 'react-router-dom'
+import { FormEvent, useState } from 'react'
+import * as Dialog from '@radix-ui/react-dialog'
+import { CreateTagForm } from './components/create-tag-form'
+
+export interface Tag {
+  title: string
+  slug: string
+  amountOfVideos: number
+  id: string
+}
 
 export interface TagResponse {
-  // eslint-disable-next-line no-use-before-define
-  data: Tag[]
   first: number
   prev: number | null
   next: number
   last: number
   pages: number
   items: number
-}
-
-export interface Tag {
-  id: string
-  title: string
-  amountOfVideos: number
-  slug: string
+  data: Tag[]
 }
 
 export function App() {
@@ -44,7 +50,11 @@ export function App() {
 
   const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1
 
-  const { data: tagsResponse, isLoading } = useQuery<TagResponse>({
+  const {
+    data: tagsResponse,
+    isLoading,
+    isFetching,
+  } = useQuery<TagResponse>({
     queryKey: ['get-tags', urlFilter, page],
     queryFn: async () => {
       const response = await fetch(
@@ -52,14 +62,14 @@ export function App() {
       )
       const data = await response.json()
 
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
       return data
     },
     placeholderData: keepPreviousData,
   })
 
-  function handleFilter() {
+  function handleFilter(event: FormEvent) {
+    event.preventDefault()
+
     setSearchParams((params) => {
       params.set('page', '1')
       params.set('filter', filter)
@@ -78,7 +88,6 @@ export function App() {
         <Header />
         <Tabs />
       </div>
-
       <main className="max-w-6xl mx-auto space-y-5">
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold">Tags</h1>
@@ -103,12 +112,14 @@ export function App() {
                   </Dialog.Description>
                 </div>
 
-                {/* <CreateTagForm /> */}
+                <CreateTagForm />
               </Dialog.Content>
             </Dialog.Portal>
           </Dialog.Root>
 
-          {/* {} */}
+          {isFetching && (
+            <Loader2 className="size-4 animate-spin text-zinc-500" />
+          )}
         </div>
 
         <div className="flex items-center justify-between">

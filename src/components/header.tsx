@@ -60,7 +60,7 @@ export function Header() {
         </svg>
 
         <div className="flex items-center gap-2.5">
-          <span className="text-sm font-medium text-zinc-100">Ignite</span>
+          <span className="text-sm font-medium text-zinc-100">Trail name</span>
 
           <ChevronDown className="text-zinc-600 size-4" />
         </div>
@@ -68,11 +68,11 @@ export function Header() {
 
       <div className="flex items-center gap-3">
         <div className="flex flex-col items-end gap-0.5">
-          <span className="text-sm font-medium">Diego Fernandes</span>
-          <span className="text-xs text-zinc-400">diego@nivo.video</span>
+          <span className="text-sm font-medium">Vanessa Brazuna</span>
+          <span className="text-xs text-zinc-400">vanessa@nivo.video</span>
         </div>
         <img
-          src="https://github.com/diego3g.png"
+          src="https://github.com/vanessabrazuna.png"
           className="size-8 rounded-full"
           alt=""
         />

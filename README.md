@@ -19,6 +19,8 @@ The project was developed using the following technologies
 - [Lucide React](https://lucide.dev/)
 - [Json Server](https://github.com/typicode/json-server) <!-- updated -->
 - [React Query](https://tanstack.com/query/latest)
+- [React Hook Form](https://react-hook-form.com/)
+- [Zod](https://zod.dev)
 - [Eslint](https://eslint.org/)
 
 
